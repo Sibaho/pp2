@@ -89,7 +89,7 @@ Admin Dashboard
                                 <div class="col-lg-6">
                                     <div class="mb-3">
                                         <label for="basicpill-firstname-input" class="form-label">Tanggal Akhir PRJ</label>
-                                        <input type="date" class="form-control" name="tanggal_akhir_prf" value="{{ $monitoringData->tanggal_akhir_prf }}">
+                                        <input type="date" class="form-control" name="tanggal_akhir_prf" value="{{ $monitoringData->tanggal_akhir_prj }}">
                                     </div>
                                     <div class="mb-3">
                                         <label for="basicpill-firstname-input" class="form-label">Tenggat Waktu Permohonan</label>
@@ -110,9 +110,9 @@ Admin Dashboard
                                     <div class="mb-3">
                                         <label for="basicpill-firstname-input" class="form-label">Aktif</label>
                                         <select class="form-control" name="aktif" >
-                                            <option value="">-- Select Status --</option>
-                                            <option value="aktif">Aktif</option>
-                                            <option value="tidak aktif">Tidak Aktif</option>
+                                            <option value="aktif" {{ $monitoringData->aktif == 'aktif' ? 'selected' : '' }}>Aktif</option>
+                                            <option value="tidak aktif" {{ $monitoringData->aktif == 'tidak aktif' ? 'selected' : '' }}>Tidak Aktif</option>
+                                            
                                         </select>
                                     </div>
                                     <div class="mb-3">
