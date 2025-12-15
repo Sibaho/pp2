@@ -28,7 +28,7 @@ Admin Dashboard
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Monitoring</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.monitoring.index') }}">Monitoring</a></li>
                             <li class="breadcrumb-item active">Form Monitoring</li>
                         </ol>
                     </div>
@@ -173,19 +173,27 @@ Admin Dashboard
                                     </div>
                                     <div class="mb-3">
                                         <label for="basicpill-firstname-input" class="form-label">Arsip PRJ</label>
-                                        <input type="text" class="form-control" name="arsip_prj" >
+                                         <select class="form-control" name="arsip_prj" >
+                                            <option value="">-- Select Status --</option>
+                                            <option value="1">Ada</option>
+                                            <option value="0">Tidak Ada</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="mb-3">
                                         <label for="basicpill-firstname-input" class="form-label">Penilaian</label>
-                                        <input type="text" class="form-control" name="penilaian" >
+                                         <select class="form-control" name="penilaian" >
+                                            <option value="">-- Select Status --</option>
+                                            <option value="1">Ya</option>
+                                            <option value="0">Tidak </option>
+                                        </select>
                                     </div>
 
                                 </div>
 
                                 <div class="d-flex justify-content-end">
-                                    <a href="{{ route('admin.view.users')}}" class="btn btn-light me-1">Cancel</a>
+                                    <a href="{{ route('admin.monitoring.index')}}" class="btn btn-light me-1">Cancel</a>
                                     <button type="submit" class="btn btn-primary">Add</button>
                                 </div>
                             </div>

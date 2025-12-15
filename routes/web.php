@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AsetController;
 use App\Http\Controllers\MonitoringController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Timpp2Controller;
@@ -46,8 +47,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/view-users', 'viewUsers')->name('view.users');
             Route::get('/add-user', 'addUser')->name('user.add');
             Route::post('/add-user', 'storeUser')->name('user.store');
-            Route::get('/edit-user/{id}', 'editUser')->name('user.edit');
-            Route::post('/update-user/{id}', 'updateUser')->name('user.update');
+            Route::get('/edit-user/{uuid}', 'editUser')->name('user.edit');
+            Route::post('/update-user/{uuid}', 'updateUser')->name('user.update');
             Route::delete('/delete-user', 'deleteUser')->name('user.delete');
         });
 
@@ -55,10 +56,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/monitoring', 'index')->name('monitoring.index');
             Route::get('/monitoring/add', 'add')->name('monitoring.add');
             Route::post('/monitoring/add', 'store')->name('monitoring.store');
-            Route::get('/monitoring/edit/{id}', 'edit')->name('monitoring.edit');
-            Route::post('/monitoring/update/{id}', 'update')->name('monitoring.update');
-            Route::get('/monitoring/delete/{id}', 'delete')->name('monitoring.delete');
-            Route::get('/monitoring/view/{id}', 'view')->name('monitoring.view');
+            Route::get('/monitoring/edit/{uuid}', 'edit')->name('monitoring.edit');
+            Route::post('/monitoring/update/{uuid}', 'update')->name('monitoring.update');
+            Route::get('/monitoring/delete/{uuid}', 'delete')->name('monitoring.delete');
+            Route::get('/monitoring/view/{uuid}', 'view')->name('monitoring.view');
+        });
+
+        Route::controller(AsetController::class)->group(function () {
+            Route::get('/asets', 'index')->name('asets.index');
+            Route::get('/asets/add', 'add')->name('asets.add');
+            Route::post('/asets/add', 'store')->name('asets.store');
+            Route::get('/asets/edit/{uuid}', 'edit')->name('asets.edit');
+            Route::post('/asets/update/{uuid}', 'update')->name('asets.update');
+            Route::get('/asets/delete/{uuid}', 'delete')->name('asets.delete');
+            Route::get('/asets/view/{uuid}', 'view')->name('asets.view');
         });
     });
 });
@@ -84,6 +95,16 @@ Route::prefix('timpp2')->name('timpp2.')->group(function () {
             Route::post('/monitoring/update/{id}', 'update')->name('monitoring.update');
             Route::get('/monitoring/delete/{id}', 'delete')->name('monitoring.delete');
             Route::get('/monitoring/view/{id}', 'view')->name('monitoring.view');
+        });
+
+         Route::controller(AsetController::class)->group(function () {
+            Route::get('/asets', 'index')->name('asets.index');
+            Route::get('/asets/add', 'add')->name('asets.add');
+            Route::post('/asets/add', 'store')->name('asets.store');
+            Route::get('/asets/edit/{id}', 'edit')->name('asets.edit');
+            Route::post('/asets/update/{id}', 'update')->name('asets.update');
+            Route::get('/asets/delete/{id}', 'delete')->name('asets.delete');
+            Route::get('/asets/view/{id}', 'view')->name('asets.view');
         });
     });
 });

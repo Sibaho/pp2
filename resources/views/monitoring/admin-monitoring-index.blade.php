@@ -82,7 +82,7 @@ Admin Dashboard
                                         <td>{{ $item->lokasi_aset }}</td>
                                         <td>{{ $item->aset }}</td>
                                         <td>{{ \Carbon\Carbon::parse($item->tanggal_awal_prj)->locale('id')->translatedFormat('d F Y') }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($item->tanggal_akhir_prj)->locale('id')->translatedFormat('d F Y') }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($item->tanggal_akhir_prf)->locale('id')->translatedFormat('d F Y') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($item->tanggal_tenggat_waktu_permohonan_perpanjangan)->locale('id')->translatedFormat('d F Y') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($item->reminder_prj_berakhir)->locale('id')->translatedFormat('d F Y') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($item->dua_bulan_pengawasan)->locale('id')->translatedFormat('d F Y') }}</td>
@@ -98,10 +98,10 @@ Admin Dashboard
                                         <td>{{ $item->arsip_prj == 1 ? 'Ada' : '' }}</td>
                                         <td>{{ $item->penilaian == 1 ? 'Ya' : 'Tidak' }}</td>
                                         <td>
-                                            <a href="{{ route('admin.monitoring.edit',$item['id']) }}" class="btn btn-info waves-effect waves-light">
+                                            <a href="{{ route('admin.monitoring.edit',$item['uuid']) }}" class="btn btn-info waves-effect waves-light">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a href="{{ route('admin.monitoring.delete',$item['id']) }}" class="btn btn-danger waves-effect waves-light">
+                                            <a href="{{ route('admin.monitoring.delete',$item['uuid']) }}" class="btn btn-danger waves-effect waves-light">
                                                 <i class="fas fa-trash"></i>
                                             </a>
                                         </td>

@@ -41,7 +41,9 @@ class MonitoringController extends Controller
 
     public function store(Request $request)
     {
+        $request->merge(['uuid' => \Illuminate\Support\Str::uuid()]);
         Monitoring::create($request->all());
+        
         $notification = [
             'message' => 'Monitoring created successfully',
             'alert-type' => 'success'
@@ -49,24 +51,25 @@ class MonitoringController extends Controller
         return redirect()->back()->with($notification);
     }
 
-    public function edit($id)
+    public function edit($uuid)
     {
-        
+        $monitoringData = Monitoring::where('uuid', $uuid)->firstOrFail();
         if (Auth::guard('admin')->check()) {
             $userId = Auth::guard('admin')->user()->id;
             $profileData = Admin::find($userId);
-            $monitoringData = Monitoring::findOrFail($id);
+            
             return view('monitoring.admin-monitoring-edit', compact('monitoringData', 'profileData'));
         }
         if (Auth::guard('timpp2')->check()) {
-            $monitoringData = Monitoring::findOrFail($id);
+            
             return view('monitoring.timpp2-monitoring-edit', compact('monitoringData'));
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $uuid)
     {
-        $monitoringData = Monitoring::findOrFail($id);
+        // dd($request->all());
+        $monitoringData = Monitoring::where('uuid', $uuid)->firstOrFail();
         $monitoringData->update($request->all());
         $notification = [
             'message' => 'Monitoring updated successfully',

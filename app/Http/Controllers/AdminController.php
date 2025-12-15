@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redis;
 use App\Models\Monitoring;
+use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
@@ -48,7 +49,9 @@ class AdminController extends Controller
         $profileData = Admin::find($id);
         $aktifCount = Monitoring::where('aktif', 'aktif')->count();
         $selesaiCount = Monitoring::where('aktif', 'selesai')->count();
-        return view('admin/dashboard', compact('profileData', 'aktifCount', 'selesaiCount'));
+        $monitorings = Monitoring::dueWithinDays(7)->get();
+        // dd( $aktifCount );
+        return view('admin/dashboard', compact('profileData', 'aktifCount', 'selesaiCount', 'monitorings'));
     }
 
     public function logout()
@@ -96,7 +99,6 @@ class AdminController extends Controller
 
     public function storeUser(Request $request)
     {
-        // dd($request->all());
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:admins',
@@ -105,6 +107,7 @@ class AdminController extends Controller
 
         if ($request->kind == 'timpp2') {
             $user = new Timpp2();
+            $user->uuid = Str::uuid();
             $user->name = $request->name;
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
@@ -112,6 +115,7 @@ class AdminController extends Controller
             $user->save();
         } else {
             $user = new User();
+            $user->uuid = Str::uuid();
             $user->name = $request->name;
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
@@ -159,35 +163,47 @@ class AdminController extends Controller
         return redirect()->back()->with('error', 'User not found.');
     }
 
-    public function editUser($id)
+    public function editUser($uuid)
     {
-        $user = Admin::find($id);
+        $id = Auth::guard('admin')->user()->id;
+        $profileData = Admin::find($id);
+        $user = User::where('uuid', $uuid)->first();
         if ($user) {
-            return view('admin.edit-user', compact('user'));
+            return view('admin.user-edit', compact('user', 'profileData'));
         }
         return redirect()->back()->with('error', 'User not found.');
     }
 
-    public function updateUser(Request $request, $id)
+    public function updateUser(Request $request, $uuid)
     {
-        $user = Admin::find($id);
-        if ($user) {
-            $request->validate([
-                'name' => 'required|string|max:255',
-                'email' => 'required|email|max:255|unique:admins,email,' . $id,
-                'password' => 'nullable|string|min:8|confirmed',
-            ]);
+        if ($request->role == 'staff') {
+            $user = User::where('uuid', $uuid)->first();
+            if ($user){
+                $user->name = $request->name;
+                $user->email = $request->email;
 
-            $user->name = $request->name;
-            $user->email = $request->email;
+                if ($request->filled('password')) {
+                    $user->password = bcrypt($request->password);
+                }
 
-            if ($request->filled('password')) {
-                $user->password = bcrypt($request->password);
+                $user->save();
+
+                return redirect()->back()->with('success', 'User updated successfully.');
             }
+        } elseif ($request->role == 'timpp2') {
+            $user = Timpp2::where('uuid', $uuid)->first();
+            if ($user){
+                $user->name = $request->name;
+                $user->email = $request->email;
 
-            $user->save();
+                if ($request->filled('password')) {
+                    $user->password = bcrypt($request->password);
+                }
 
-            return redirect()->back()->with('success', 'User updated successfully.');
+                $user->save();
+
+                return redirect()->back()->with('success', 'User updated successfully.');
+            }
         }
         return redirect()->back()->with('error', 'User not found.');
     }

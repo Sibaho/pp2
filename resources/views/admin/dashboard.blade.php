@@ -1,5 +1,10 @@
 @extends('layouts.dashboard')
 
+@php
+use Carbon\Carbon;
+$today = Carbon::now('Asia/Jakarta')->startOfDay();
+@endphp
+
 @section('title_dashboard')
 Admin Dashboard
 @endsection
@@ -46,20 +51,11 @@ Admin Dashboard
                     <div class="card-body">
                         <div class="row align-items-center">
                             <div class="col-6">
-                                <span class="text-muted mb-3 lh-1 d-block text-truncate">Aktif</span>
+                                <span class="text-muted mb-3 lh-1 d-block text-truncate">PRJ Aktif</span>
                                 <h4 class="mb-3">
-                                    <span class="counter-value">{{ $aktifCount }}</span>
+                                    <span class="counter-value" data-target="{{ $aktifCount }}">0</span>
                                 </h4>
                             </div>
-
-                            <div class="col-6">
-                                <div id="mini-chart1" data-colors='["#5156be"]' class="apex-charts mb-2">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="text-nowrap">
-                            <span class="badge bg-success-subtle text-success">+$20.9k</span>
-                            <span class="ms-1 text-muted font-size-13">Since last week</span>
                         </div>
                     </div><!-- end card body -->
                 </div><!-- end card -->
@@ -72,25 +68,121 @@ Admin Dashboard
                     <div class="card-body">
                         <div class="row align-items-center">
                             <div class="col-6">
-                                <span class="text-muted mb-3 lh-1 d-block text-truncate">Selesai</span>
+                                <span class="text-muted mb-3 lh-1 d-block text-truncate">PRJ Selesai</span>
                                 <h4 class="mb-3">
-                                    <span class="counter-value">{{ $selesaiCount}}</span>
+                                    <span class="counter-value" data-target="{{ $selesaiCount }}">0</span>
                                 </h4>
                             </div>
-                            <div class="col-6">
-                                <div id="mini-chart2" data-colors='["#5156be"]' class="apex-charts mb-2">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="text-nowrap">
-                            <span class="badge bg-danger-subtle text-danger">-29 Trades</span>
-                            <span class="ms-1 text-muted font-size-13">Since last week</span>
                         </div>
                     </div><!-- end card body -->
                 </div><!-- end card -->
             </div><!-- end col-->
         </div><!-- end row-->
+
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Reminder & Due Date Monitoring</h4>
+
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>No</th>
+                                        <th>No. PRJ</th>
+                                        <th>Mitra</th>
+                                        <th>Aset</th>
+                                        <th>Tanggal Akhir PRJ</th>
+                                        <th>Sisa Hari</th>
+                                        <th>PIC</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @forelse ($monitorings as $index => $m)
+                                    @php
+                                    $dueDate = $m->tanggal_akhir_prf
+                                    ? Carbon::parse($m->tanggal_akhir_prf)->startOfDay()
+                                    : null;
+
+                                    $daysLeft = $dueDate
+                                    ? $today->diffInDays($dueDate, false)
+                                    : null;
+
+                                    // Default
+                                    $rowClass = '';
+                                    $badgeClass = 'bg-secondary';
+                                    $icon = 'help-circle';
+                                    $statusText = 'Tidak ada tanggal';
+
+                                    if (!is_null($daysLeft)) {
+                                    if ($daysLeft < 0) {
+                                        $rowClass='table-danger' ;
+                                        $badgeClass='bg-danger' ;
+                                        $icon='alert-octagon' ;
+                                        $statusText='Overdue' ;
+                                        } elseif ($daysLeft <=7) {
+                                        $rowClass='table-warning' ;
+                                        $badgeClass='bg-warning' ;
+                                        $icon='alert-circle' ;
+                                        $statusText='≤ 7 Hari' ;
+                                        } elseif ($daysLeft <=30) {
+                                        $rowClass='table-info' ;
+                                        $badgeClass='bg-info' ;
+                                        $icon='clock' ;
+                                        $statusText='≤ 30 Hari' ;
+                                        } else {
+                                        $rowClass='table-success' ;
+                                        $badgeClass='bg-success' ;
+                                        $icon='check-circle' ;
+                                        $statusText='> 30 Hari' ;
+                                        }
+                                        }
+                                        @endphp
+
+                                        <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $m->no_prj }}</td>
+                                        <td>{{ $m->mitra }}</td>
+                                        <td>{{ $m->aset }}</td>
+                                        <td>
+                                            {{ $dueDate ? $dueDate->format('d M Y') : '-' }}
+                                        </td>
+                                        <td>
+                                            @php
+                                            $daysDisplay = is_null($daysLeft) ? null : floor($daysLeft);
+                                            @endphp
+                                            <span class="badge {{ $badgeClass }} d-inline-flex align-items-center gap-1">
+                                                <i data-feather="{{ $icon }}" style="width:14px;height:14px;"></i>
+                                                {{ $daysDisplay ?? '-' }} hari
+                                            </span>
+                                        </td>
+                                        <td>{{ $m->pic }}</td>
+                                        </tr>
+                                        @empty
+                                        <tr>
+                                            <td colspan="8" class="text-center text-muted">
+                                                Tidak ada data
+                                            </td>
+                                        </tr>
+                                        @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+                <!-- end card body -->
+            </div>
+            <!-- end card -->
+        </div>
+        <!-- end col -->
     </div>
-    <!-- container-fluid -->
+</div>
+<!-- container-fluid -->
 </div>
 @endsection

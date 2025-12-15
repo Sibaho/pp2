@@ -65,7 +65,7 @@ Admin Dashboard
 
                                     </td>
                                     <td>
-                                        <a href="{{ route('admin.user.edit',$item['id']) }}" class="btn btn-info waves-effect waves-light"><i class="fas fa-edit"></i></a>
+                                        <a href="{{ route('admin.user.edit',$item['uuid']) }}" class="btn btn-info waves-effect waves-light"><i class="fas fa-edit"></i></a>
                                         <form action="{{ route('admin.user.delete', ['id' => $item['id'], 'role' => $item['role']]) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure?')">
                                             @csrf
                                             @method('DELETE')

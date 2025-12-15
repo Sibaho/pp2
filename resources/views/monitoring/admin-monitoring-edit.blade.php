@@ -42,7 +42,7 @@ Admin Dashboard
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <form action="{{ route('admin.monitoring.update', ['id' => $monitoringData->id]) }}" method="POST">
+                        <form action="{{ route('admin.monitoring.update', ['uuid' => $monitoringData->uuid]) }}" method="POST">
                             @csrf
                         
                             <div class="row">
@@ -89,7 +89,7 @@ Admin Dashboard
                                 <div class="col-lg-6">
                                     <div class="mb-3">
                                         <label for="basicpill-firstname-input" class="form-label">Tanggal Akhir PRJ</label>
-                                        <input type="date" class="form-control" name="tanggal_akhir_prf" value="{{ $monitoringData->tanggal_akhir_prj }}">
+                                        <input type="date" class="form-control" name="tanggal_akhir_prf" value="{{ $monitoringData->tanggal_akhir_prf }}">
                                     </div>
                                     <div class="mb-3">
                                         <label for="basicpill-firstname-input" class="form-label">Tenggat Waktu Permohonan</label>
@@ -195,7 +195,7 @@ Admin Dashboard
 
                                 <div class="d-flex justify-content-end">
                                     <a href="{{ route('admin.view.users')}}" class="btn btn-light me-1">Cancel</a>
-                                    <button type="submit" class="btn btn-primary">Add</button>
+                                    <button type="submit" class="btn btn-primary">Save</button>
                                 </div>
                             </div>
                         </form>
