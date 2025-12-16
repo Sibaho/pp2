@@ -147,7 +147,7 @@ Admin Dashboard
                                         <td>{{ $index + 1 }}</td>
                                         <td>{{ $m->no_prj }}</td>
                                         <td>{{ $m->mitra }}</td>
-                                        <td>{{ $m->aset }}</td>
+                                        <td>{{ $m->aset->nama_aset }}</td>
                                         <td>
                                             {{ $dueDate ? $dueDate->format('d M Y') : '-' }}
                                         </td>

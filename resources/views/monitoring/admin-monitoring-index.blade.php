@@ -79,8 +79,8 @@ Admin Dashboard
                                         <td>{{ $item->tahun }}</td>
                                         <td>{{ $item->mitra }}</td>
                                         <td>{{ $item->cp_mitra }}</td>
-                                        <td>{{ $item->lokasi_aset }}</td>
-                                        <td>{{ $item->aset }}</td>
+                                        <td>{{ $item->aset->lokasi_aset }}</td>
+                                        <td>{{ $item->aset->nama_aset }}</td>
                                         <td>{{ \Carbon\Carbon::parse($item->tanggal_awal_prj)->locale('id')->translatedFormat('d F Y') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($item->tanggal_akhir_prf)->locale('id')->translatedFormat('d F Y') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($item->tanggal_tenggat_waktu_permohonan_perpanjangan)->locale('id')->translatedFormat('d F Y') }}</td>

@@ -34,8 +34,8 @@ class Monitoring extends Model
         $limit = Carbon::now('Asia/Jakarta')->startOfDay()->addDays($days)->toDateString();
 
         return $query->whereNotNull('tanggal_akhir_prf')
-                     ->whereBetween('tanggal_akhir_prf', [$today, $limit])
-                     ->orderBy('tanggal_akhir_prf', 'asc');
+            ->whereBetween('tanggal_akhir_prf', [$today, $limit])
+            ->orderBy('tanggal_akhir_prf', 'asc');
     }
 
     /**
@@ -52,5 +52,10 @@ class Monitoring extends Model
         return $includeToday
             ? $query->whereNotNull('tanggal_akhir_prf')->whereDate('tanggal_akhir_prf', '<=', $today)->orderBy('tanggal_akhir_prf', 'asc')
             : $query->whereNotNull('tanggal_akhir_prf')->whereDate('tanggal_akhir_prf', '<', $today)->orderBy('tanggal_akhir_prf', 'asc');
+    }
+
+    public function aset()
+    {
+        return $this->belongsTo(Aset::class, 'aset_id');
     }
 }

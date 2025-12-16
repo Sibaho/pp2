@@ -44,7 +44,7 @@ Admin Dashboard
                     <div class="card-body">
                         <form action="{{ route('admin.monitoring.update', ['uuid' => $monitoringData->uuid]) }}" method="POST">
                             @csrf
-                        
+
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="mb-3">
@@ -55,7 +55,7 @@ Admin Dashboard
                                         <label for="basicpill-firstname-input" class="form-label">DL</label>
                                         <input type="text" class="form-control" name="dl" value="{{ $monitoringData->dl}}" required>
                                     </div>
-                                </div>  
+                                </div>
                                 <div class="col-lg-6">
                                     <div class="mb-3">
                                         <label for="basicpill-firstname-input" class="form-label">Tahun</label>
@@ -72,15 +72,22 @@ Admin Dashboard
                                         <input type="text" class="form-control" name="cp_mitra" value="{{ $monitoringData->cp_mitra }}">
                                     </div>
                                     <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Lokasi Aset</label>
-                                        <input type="text" class="form-control" name="lokasi_aset" value="{{ $monitoringData->lokasi_aset }}">
+                                        <label for="basicpill-firstname-input" class="form-label">Arsip PRJ</label>
+                                        <select class="form-control" name="arsip_prj">
+                                            <option value="">-- Select Status --</option>
+                                            <option value="1">Ada</option>
+                                            <option value="0">Tidak Ada</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Aset</label>
-                                        <input type="text" class="form-control" name="aset" value="{{ $monitoringData->aset }}">
-                                    </div>
+                                     <label for="basicpill-firstname-input" class="form-label">Aset</label>
+                                        <select class="form-control" name="aset_id">
+                                            <option value="">-- Select Aset --</option>
+                                            @foreach($asets as $item)
+                                            <option value="{{ $item['id'] }}">{{ $item['nama_aset'] }}</option>
+                                            @endforeach
+                                        </select>
                                     <div class="mb-3">
                                         <label for="basicpill-firstname-input" class="form-label">Tanggal Awal PRJ</label>
                                         <input type="date" class="form-control" name="tanggal_awal_prj" value="{{ $monitoringData->tanggal_awal_prj }}">
@@ -109,10 +116,10 @@ Admin Dashboard
                                 <div class="col-lg-6">
                                     <div class="mb-3">
                                         <label for="basicpill-firstname-input" class="form-label">Aktif</label>
-                                        <select class="form-control" name="aktif" >
+                                        <select class="form-control" name="aktif">
                                             <option value="aktif" {{ $monitoringData->aktif == 'aktif' ? 'selected' : '' }}>Aktif</option>
                                             <option value="tidak aktif" {{ $monitoringData->aktif == 'tidak aktif' ? 'selected' : '' }}>Tidak Aktif</option>
-                                            
+
                                         </select>
                                     </div>
                                     <div class="mb-3">
@@ -172,19 +179,12 @@ Admin Dashboard
                                         <label for="basicpill-firstname-input" class="form-label">Pembayaran PBB</label>
                                         <input type="text" class="form-control" name="pembayaran_pbb" value="{{ $monitoringData->pembayaran_pbb }}">
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Arsip PRJ</label>
-                                         <select class="form-control" name="arsip_prj" >
-                                            <option value="">-- Select Status --</option>
-                                            <option value="1">Ada</option>
-                                            <option value="0">Tidak Ada</option>
-                                        </select>
-                                    </div>
+
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="mb-3">
                                         <label for="basicpill-firstname-input" class="form-label">Penilaian</label>
-                                         <select class="form-control" name="penilaian" >
+                                        <select class="form-control" name="penilaian">
                                             <option value="">-- Select Status --</option>
                                             <option value="1">Ya</option>
                                             <option value="0">Tidak </option>
@@ -194,7 +194,7 @@ Admin Dashboard
                                 </div>
 
                                 <div class="d-flex justify-content-end">
-                                    <a href="{{ route('admin.view.users')}}" class="btn btn-light me-1">Cancel</a>
+                                    <a href="{{ route('admin.monitoring.index') }}" class="btn btn-light me-1">Cancel</a>
                                     <button type="submit" class="btn btn-primary">Save</button>
                                 </div>
                             </div>
