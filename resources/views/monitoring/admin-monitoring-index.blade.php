@@ -43,30 +43,25 @@ Admin Dashboard
                             <table id="datatable" class="table table-bordered table-striped nowrap w-100">
                                 <thead>
                                     <tr>
-                                        <th>Sl</th>
+                                        <th>No</th>
                                         <th>No. PRJ</th>
-                                        <th>DL</th>
+                                        <th>Dokumen Perjanjian</th>
                                         <th>Tahun</th>
                                         <th>Mitra</th>
                                         <th>CP Mitra</th>
-                                        <th>Lokasi Asal</th>
                                         <th>Aset</th>
+                                        <th>Lokasi Aset</th>
                                         <th>Tanggal Awal PRJ</th>
                                         <th>Tanggal Akhir PRJ</th>
-                                        <th>Tgl Tenggat Waktu Permohonan Perpanjangan</th>
-                                        <th>Reminder PRJ Berakhir</th>
-                                        <th>2 Bulan Pengawasan</th>
-                                        <th>Aktif</th>
+                                        <th>Status Perjanjian</th>
                                         <th>Due Date Invoice</th>
-                                        <th>Due Date Pembayaran Uang Sewa Guna</th>
+                                        <th>Tahapan Pembayaran Sewa Guna</th>
                                         <th>Due Date</th>
                                         <th>Reminder</th>
-                                        <th>Jumlah Bayar</th>
+                                        <th>Biaya Sewa Guna</th>
                                         <th>PIC</th>
                                         <th>Pending Issue</th>
                                         <th>Pembayaran PBB</th>
-                                        <th>Arsip PRJ-nya sudah ada?</th>
-                                        <th>Apakah sudah ada penilaiannya?</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -75,17 +70,32 @@ Admin Dashboard
                                     <tr>
                                         <td>{{ $key+1 }}</td>
                                         <td>{{ $item->no_prj }}</td>
-                                        <td>{{ $item->dl }}</td>
+                                        <td class="text-center">
+                                            @if ($item->dokumen_perjanjian)
+                                            <a href="{{ route('monitoring.dokumen.preview', $item->uuid) }}"
+                                                target="_blank"
+                                                class="btn btn-sm btn-primary mb-1"
+                                                title="Preview Dokumen">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+
+                                            <a href="{{ route('monitoring.dokumen.download', $item->uuid) }}"
+                                                download
+                                                class="btn btn-sm btn-success"
+                                                title="Download Dokumen">
+                                                <i class="fas fa-download"></i>
+                                            </a>
+                                            @else
+                                            <span class="badge bg-secondary">Tidak ada</span>
+                                            @endif
+                                        </td>
                                         <td>{{ $item->tahun }}</td>
                                         <td>{{ $item->mitra }}</td>
                                         <td>{{ $item->cp_mitra }}</td>
-                                        <td>{{ $item->aset->lokasi_aset }}</td>
                                         <td>{{ $item->aset->nama_aset }}</td>
+                                        <td>{{ $item->aset->lokasi_aset }}</td>
                                         <td>{{ \Carbon\Carbon::parse($item->tanggal_awal_prj)->locale('id')->translatedFormat('d F Y') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($item->tanggal_akhir_prf)->locale('id')->translatedFormat('d F Y') }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($item->tanggal_tenggat_waktu_permohonan_perpanjangan)->locale('id')->translatedFormat('d F Y') }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($item->reminder_prj_berakhir)->locale('id')->translatedFormat('d F Y') }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($item->dua_bulan_pengawasan)->locale('id')->translatedFormat('d F Y') }}</td>
                                         <td>{{ $item->aktif }}</td>
                                         <td>{{ \Carbon\Carbon::parse($item->due_date_invoice)->locale('id')->translatedFormat('d F Y') }}</td>
                                         <td>{{ $item->due_date_pembayaran_sewa_guna }}</td>
@@ -95,8 +105,6 @@ Admin Dashboard
                                         <td>{{ $item->pic }}</td>
                                         <td>{{ $item->pending_issue }}</td>
                                         <td>{{ $item->pembayaran_pbb }}</td>
-                                        <td>{{ $item->arsip_prj == 1 ? 'Ada' : '' }}</td>
-                                        <td>{{ $item->penilaian == 1 ? 'Ya' : 'Tidak' }}</td>
                                         <td>
                                             <a href="{{ route('admin.monitoring.edit',$item['uuid']) }}" class="btn btn-info waves-effect waves-light">
                                                 <i class="fas fa-edit"></i>

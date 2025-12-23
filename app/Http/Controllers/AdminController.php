@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Admin;
+use App\Models\Aset;
 use App\Models\Timpp2;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -50,8 +51,10 @@ class AdminController extends Controller
         $aktifCount = Monitoring::where('aktif', 'aktif')->count();
         $selesaiCount = Monitoring::where('aktif', 'selesai')->count();
         $monitorings = Monitoring::dueWithinDays(7)->get();
-        // dd( $aktifCount );
-        return view('admin/dashboard', compact('profileData', 'aktifCount', 'selesaiCount', 'monitorings'));
+        $idleAsetCount = Aset::where('status_aset', 'Idle')->count();
+        $optimizedAsetCount = Aset::where('status_aset', 'Optimized')->count();
+        
+        return view('admin/dashboard', compact('profileData', 'aktifCount', 'selesaiCount', 'monitorings', 'idleAsetCount', 'optimizedAsetCount'));
     }
 
     public function logout()

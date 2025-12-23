@@ -77,6 +77,38 @@ Admin Dashboard
                     </div><!-- end card body -->
                 </div><!-- end card -->
             </div><!-- end col-->
+            <div class="col-xl-3 col-md-6">
+                <!-- card -->
+                <div class="card card-h-100">
+                    <!-- card body -->
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-6">
+                                <span class="text-muted mb-3 lh-1 d-block text-truncate">Aset Idle</span>
+                                <h4 class="mb-3">
+                                    <span class="counter-value" data-target="{{ $idleAsetCount }}">0</span>
+                                </h4>
+                            </div>
+                        </div>
+                    </div><!-- end card body -->
+                </div><!-- end card -->
+            </div><!-- end col-->
+            <div class="col-xl-3 col-md-6">
+                <!-- card -->
+                <div class="card card-h-100">
+                    <!-- card body -->
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-6">
+                                <span class="text-muted mb-3 lh-1 d-block text-truncate">Aset Optimized</span>
+                                <h4 class="mb-3">
+                                    <span class="counter-value" data-target="{{ $optimizedAsetCount }}">0</span>
+                                </h4>
+                            </div>
+                        </div>
+                    </div><!-- end card body -->
+                </div><!-- end card -->
+            </div><!-- end col-->
         </div><!-- end row-->
 
         <div class="row">

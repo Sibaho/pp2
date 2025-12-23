@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Admin;
 use App\Models\Timpp2;
+use Illuminate\Support\Str;
 
 class AsetController extends Controller
 {
@@ -34,24 +35,42 @@ class AsetController extends Controller
 
     public function store(Request $request)
     {
+        // 1. Validasi dasar (tanpa unique dulu)
         $request->validate([
             'nama_aset' => 'required|string|max:255',
             'lokasi_aset' => 'required|string|max:255',
             'status_aset' => 'required|string|max:100',
-            'kode_aset' => 'required|string|max:100|unique:asets,kode_aset',
+            'kode_aset' => 'required|string|max:100',
             'deskripsi' => 'nullable|string',
         ]);
-        $request->merge(['uuid' => \Illuminate\Support\Str::uuid()]);
 
-        Aset::create($request->all());
+        // 2. Cek manual: kode_aset sudah ada?
+        if (Aset::where('kode_aset', $request->kode_aset)->exists()) {
+            return redirect()->back()
+                ->withInput()
+                ->with([
+                    'message' => 'Kode aset sudah digunakan',
+                    'alert-type' => 'error'
+                ]);
+        }
 
-        $notification = [
+        // 3. Simpan ke database
+        Aset::create([
+            'uuid' => Str::uuid(),
+            'nama_aset' => $request->nama_aset,
+            'lokasi_aset' => $request->lokasi_aset,
+            'status_aset' => $request->status_aset,
+            'kode_aset' => $request->kode_aset,
+            'deskripsi' => $request->deskripsi,
+        ]);
+
+        // 4. Notifikasi sukses
+        return redirect()->route('admin.asets.index')->with([
             'message' => 'Aset added successfully',
             'alert-type' => 'success'
-        ];
-
-        return redirect()->route('admin.asets.index')->with($notification);
+        ]);
     }
+
 
     public function edit($uuid)
     {

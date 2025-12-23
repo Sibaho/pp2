@@ -52,11 +52,23 @@ Admin Dashboard
                         </div>
                         <div class="mb-3">
                             <label for="example-text-input" class="form-label">Lokasi Aset</label>
-                            <input class="form-control" type="text" name="lokasi_aset">
+                             <select class="form-control" name="lokasi_aset">
+                                <option value="">Select Lokasi</option>
+                                <option value="Kilang LNG Badak">Kilang LNG Badak</option>
+                                <option value="Kilang LNG Arun">Kilang LNG Arun</option>
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label for="example-text-input" class="form-label">Status </label>
-                            <input class="form-control" type="text" name="status_aset">
+                            <select class="form-control" name="status_aset">
+                                <option value="">Select Status</option>
+                                <option value="Idle">Idle</option>
+                                <option value="Optimized">Optimized</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="example-text-input" class="form-label">Detail Aset </label>
+                            <input class="form-control" type="text" name="detail_aset">
                         </div>
                         <div class="mb-3">
                             <label for="example-text-input" class="form-label">Deskripsi</label>

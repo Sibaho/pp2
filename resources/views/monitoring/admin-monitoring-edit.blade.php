@@ -28,7 +28,7 @@ Admin Dashboard
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Monitoring</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.monitoring.index') }}">Monitoring</a></li>
                             <li class="breadcrumb-item active">Form Monitoring</li>
                         </ol>
                     </div>
@@ -42,170 +42,176 @@ Admin Dashboard
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <form action="{{ route('admin.monitoring.update', ['uuid' => $monitoringData->uuid]) }}" method="POST">
+                        <form action="{{ route('admin.monitoring.update', ['uuid' => $monitoringData->uuid]) }}" method="POST" enctype="multipart/form-data">
                             @csrf
-
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">No PRJ</label>
-                                        <input type="text" class="form-control" name="no_prj" value="{{ $monitoringData->no_prj}}" required>
+                                        <label class="form-label">No PRJ</label>
+                                        <input type="text" class="form-control" name="no_prj"
+                                            value="{{ old('no_prj', $monitoringData->no_prj) }}" required>
                                     </div>
+
                                     <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">DL</label>
-                                        <input type="text" class="form-control" name="dl" value="{{ $monitoringData->dl}}" required>
+                                        <label class="form-label">Dokumen Perjanjian</label>
+                                        <input type="file"
+                                            class="form-control"
+                                            name="dokumen_perjanjian"
+                                            accept="application/pdf">
+
+                                        @if ($monitoringData->dokumen_perjanjian)
+                                        <div class="mt-2">
+                                            <a href="{{ route('monitoring.dokumen.preview', $monitoringData->uuid) }}"
+                                                target="_blank"
+                                                class="btn btn-sm btn-primary">
+                                                <i class="fas fa-eye"></i> Preview
+                                            </a>
+
+                                            <a href="{{ route('monitoring.dokumen.download', $monitoringData->uuid) }}"
+                                                download
+                                                class="btn btn-sm btn-success">
+                                                <i class="fas fa-download"></i> Download
+                                            </a>
+                                        </div>
+                                        @endif
                                     </div>
                                 </div>
+
                                 <div class="col-lg-6">
                                     <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Tahun</label>
-                                        <input type="text" class="form-control" name="tahun" required value="{{ $monitoringData->tahun }}">
+                                        <label class="form-label">PIC</label>
+                                        <input type="text" class="form-control" name="pic"
+                                            value="{{ old('pic', $monitoringData->pic) }}">
                                     </div>
+
                                     <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Mitra</label>
-                                        <input type="text" class="form-control" name="mitra" required value="{{ $monitoringData->mitra }}">
+                                        <label class="form-label">Tahun</label>
+                                        <input type="text" class="form-control" name="tahun"
+                                            value="{{ old('tahun', $monitoringData->tahun) }}" required>
                                     </div>
                                 </div>
+
                                 <div class="col-lg-6">
                                     <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">CP Mitra</label>
-                                        <input type="text" class="form-control" name="cp_mitra" value="{{ $monitoringData->cp_mitra }}">
+                                        <label class="form-label">Mitra</label>
+                                        <input type="text" class="form-control" name="mitra"
+                                            value="{{ old('mitra', $monitoringData->mitra) }}" required>
                                     </div>
+
                                     <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Arsip PRJ</label>
-                                        <select class="form-control" name="arsip_prj">
-                                            <option value="">-- Select Status --</option>
-                                            <option value="1">Ada</option>
-                                            <option value="0">Tidak Ada</option>
-                                        </select>
+                                        <label class="form-label">CP Mitra</label>
+                                        <input type="text" class="form-control" name="cp_mitra"
+                                            value="{{ old('cp_mitra', $monitoringData->cp_mitra) }}">
                                     </div>
                                 </div>
+
                                 <div class="col-lg-6">
-                                     <label for="basicpill-firstname-input" class="form-label">Aset</label>
+                                    <div class="mb-3">
+                                        <label class="form-label">Aset</label>
                                         <select class="form-control" name="aset_id">
                                             <option value="">-- Select Aset --</option>
                                             @foreach($asets as $item)
-                                            <option value="{{ $item['id'] }}">{{ $item['nama_aset'] }}</option>
+                                            <option value="{{ $item->id }}"
+                                                {{ $monitoringData->aset_id == $item->id ? 'selected' : '' }}>
+                                                {{ $item->nama_aset }}
+                                            </option>
                                             @endforeach
                                         </select>
-                                    <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Tanggal Awal PRJ</label>
-                                        <input type="date" class="form-control" name="tanggal_awal_prj" value="{{ $monitoringData->tanggal_awal_prj }}">
                                     </div>
-                                </div>
-                                <div class="col-lg-6">
+
                                     <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Tanggal Akhir PRJ</label>
-                                        <input type="date" class="form-control" name="tanggal_akhir_prf" value="{{ $monitoringData->tanggal_akhir_prf }}">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Tenggat Waktu Permohonan</label>
-                                        <input type="date" class="form-control" name="tanggal_tenggat_waktu_permohonan_perpanjangan" value="{{ $monitoringData->tanggal_tenggat_waktu_permohonan_perpanjangan }}">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Reminder PRJ Berakhir</label>
-                                        <input type="date" class="form-control" name="reminder_prj_berakhir" value="{{ $monitoringData->reminder_prj_berakhir }}">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Dua Bulan Pengawasan</label>
-                                        <input type="date" class="form-control" name="dua_bulan_pengawasan" value="{{ $monitoringData->dua_bulan_pengawasan }}">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Aktif</label>
+                                        <label class="form-label">Status Perjanjian</label>
                                         <select class="form-control" name="aktif">
-                                            <option value="aktif" {{ $monitoringData->aktif == 'aktif' ? 'selected' : '' }}>Aktif</option>
-                                            <option value="tidak aktif" {{ $monitoringData->aktif == 'tidak aktif' ? 'selected' : '' }}>Tidak Aktif</option>
-
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Due Date Invoice</label>
-                                        <input type="date" class="form-control" name="due_date_invoice" value="{{ $monitoringData->due_date_invoice }}">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Due Date Pembayaran Uang Sewa Guna</label>
-                                        <input type="text" class="form-control" name="due_date_pembayaran_sewa_guna" value="{{ $monitoringData->due_date_pembayaran_sewa_guna }}">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Due Date</label>
-                                        <input type="date" class="form-control" name="due_date" value="{{ $monitoringData->due_date }}">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Reminder</label>
-                                        <input type="date" class="form-control" name="reminder" value="{{ $monitoringData->reminder }}">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Jumlah Bayar</label>
-                                        <input type="text" class="form-control" name="jumlah_bayar" oninput="this.value = this.value.replace(/[^0-9]/g, ''); this.value = formatRupiah(this.value);" placeholder="Rp 0" value="{{ $monitoringData->jumlah_bayar }}">
-                                        <script>
-                                            function formatRupiah(angka) {
-                                                let number_string = angka.replace(/[^,\d]/g, '').toString(),
-                                                    split = number_string.split(','),
-                                                    sisa = split[0].length % 3,
-                                                    rupiah = split[0].substr(0, sisa),
-                                                    ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-                                                if (ribuan) {
-                                                    let separator = sisa ? '.' : '';
-                                                    rupiah += separator + ribuan.join('.');
-                                                }
-
-                                                rupiah = split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
-                                                return rupiah ? 'Rp ' + rupiah : '';
-                                            }
-                                        </script>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">PIC</label>
-                                        <input type="text" class="form-control" name="pic" value="{{ $monitoringData->pic }}">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Pending Issue</label>
-                                        <input type="text" class="form-control" name="pending_issue" value="{{ $monitoringData->pending_issue }}">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Pembayaran PBB</label>
-                                        <input type="text" class="form-control" name="pembayaran_pbb" value="{{ $monitoringData->pembayaran_pbb }}">
-                                    </div>
-
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Penilaian</label>
-                                        <select class="form-control" name="penilaian">
                                             <option value="">-- Select Status --</option>
-                                            <option value="1">Ya</option>
-                                            <option value="0">Tidak </option>
+                                            <option value="aktif"
+                                                {{ $monitoringData->aktif == 'aktif' ? 'selected' : '' }}>
+                                                Aktif
+                                            </option>
+                                            <option value="tidak aktif"
+                                                {{ $monitoringData->aktif == 'tidak aktif' ? 'selected' : '' }}>
+                                                Tidak Aktif
+                                            </option>
                                         </select>
                                     </div>
+                                </div>
 
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Tanggal Awal PRJ</label>
+                                        <input type="date" class="form-control" name="tanggal_awal_prj"
+                                            value="{{ old('tanggal_awal_prj', $monitoringData->tanggal_awal_prj) }}">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Tanggal Akhir PRJ</label>
+                                        <input type="date" class="form-control" name="tanggal_akhir_prf"
+                                            value="{{ old('tanggal_akhir_prf', $monitoringData->tanggal_akhir_prf) }}">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Biaya Sewa Guna</label>
+                                        <input type="text"
+                                            class="form-control"
+                                            name="jumlah_bayar"
+                                            value="{{ old('jumlah_bayar', $monitoringData->jumlah_bayar) }}">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Pending Issue</label>
+                                        <input type="text" class="form-control" name="pending_issue"
+                                            value="{{ old('pending_issue', $monitoringData->pending_issue) }}">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Due Date</label>
+                                        <input type="date" class="form-control" name="due_date"
+                                            value="{{ old('due_date', $monitoringData->due_date) }}">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Reminder</label>
+                                        <input type="date" class="form-control" name="reminder"
+                                            value="{{ old('reminder', $monitoringData->reminder) }}">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Pembayaran PBB</label>
+                                        <input type="text" class="form-control" name="pembayaran_pbb"
+                                            value="{{ old('pembayaran_pbb', $monitoringData->pembayaran_pbb) }}">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Due Date Invoice</label>
+                                        <input type="date" class="form-control" name="due_date_invoice"
+                                            value="{{ old('due_date_invoice', $monitoringData->due_date_invoice) }}">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Tahapan Pembayaran Uang Sewa Guna</label>
+                                        <input type="text" class="form-control" name="due_date_pembayaran_sewa_guna"
+                                            value="{{ old('due_date_pembayaran_sewa_guna', $monitoringData->due_date_pembayaran_sewa_guna) }}">
+                                    </div>
                                 </div>
 
                                 <div class="d-flex justify-content-end">
                                     <a href="{{ route('admin.monitoring.index') }}" class="btn btn-light me-1">Cancel</a>
-                                    <button type="submit" class="btn btn-primary">Save</button>
+                                    <button type="submit" class="btn btn-primary">Update</button>
                                 </div>
                             </div>
                         </form>
                     </div>
-                    <!-- end card body -->
                 </div>
-                <!-- end card -->
             </div>
-            <!-- end col -->
         </div>
+
         <!-- end row -->
     </div> <!-- container-fluid -->
 </div>

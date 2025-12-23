@@ -109,4 +109,12 @@ Route::prefix('timpp2')->name('timpp2.')->group(function () {
     });
 });
 
+Route::get('/monitoring/dokumen/{uuid}', 
+    [MonitoringController::class, 'downloadDokumen']
+)->name('monitoring.dokumen.download');
+
+Route::get('/monitoring/dokumen/{uuid}/preview',
+    [MonitoringController::class, 'previewDokumen']
+)->name('monitoring.dokumen.preview');
+
 require __DIR__ . '/auth.php';

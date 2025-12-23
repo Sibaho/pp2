@@ -51,32 +51,34 @@ Admin Dashboard
                                         <input type="text" class="form-control" name="no_prj" required>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">DL</label>
-                                        <input type="text" class="form-control" name="dl" required>
+                                        <label for="basicpill-firstname-input" class="form-label">Dokumen Perjanjian</label>
+                                        <input
+                                            type="file"
+                                            class="form-control"
+                                            name="dokumen_perjanjian"
+                                            accept="application/pdf"
+                                            required>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="basicpill-firstname-input" class="form-label">PIC</label>
+                                        <input type="text" class="form-control" name="pic">
+                                    </div>
                                     <div class="mb-3">
                                         <label for="basicpill-firstname-input" class="form-label">Tahun</label>
                                         <input type="text" class="form-control" name="tahun" required>
                                     </div>
+
+                                </div>
+                                <div class="col-lg-6">
                                     <div class="mb-3">
                                         <label for="basicpill-firstname-input" class="form-label">Mitra</label>
                                         <input type="text" class="form-control" name="mitra" required>
                                     </div>
-                                </div>
-                                <div class="col-lg-6">
                                     <div class="mb-3">
                                         <label for="basicpill-firstname-input" class="form-label">CP Mitra</label>
                                         <input type="text" class="form-control" name="cp_mitra">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Arsip PRJ</label>
-                                        <select class="form-control" name="arsip_prj">
-                                            <option value="">-- Select Status --</option>
-                                            <option value="1">Ada</option>
-                                            <option value="0">Tidak Ada</option>
-                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -90,61 +92,28 @@ Admin Dashboard
                                         </select>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Tanggal Awal PRJ</label>
-                                        <input type="date" class="form-control" name="tanggal_awal_prj">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Tanggal Akhir PRJ</label>
-                                        <input type="date" class="form-control" name="tanggal_akhir_prf">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Tenggat Waktu Permohonan</label>
-                                        <input type="date" class="form-control" name="tanggal_tenggat_waktu_permohonan_perpanjangan">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Reminder PRJ Berakhir</label>
-                                        <input type="date" class="form-control" name="reminder_prj_berakhir">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Dua Bulan Pengawasan</label>
-                                        <input type="date" class="form-control" name="dua_bulan_pengawasan">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Aktif</label>
+                                        <label for="basicpill-firstname-input" class="form-label">Status Perjanjian</label>
                                         <select class="form-control" name="aktif">
                                             <option value="">-- Select Status --</option>
                                             <option value="aktif">Aktif</option>
                                             <option value="tidak aktif">Tidak Aktif</option>
                                         </select>
                                     </div>
+
+                                </div>
+                                <div class="col-lg-6">
                                     <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Due Date Invoice</label>
-                                        <input type="date" class="form-control" name="due_date_invoice">
+                                        <label for="basicpill-firstname-input" class="form-label">Tanggal Awal PRJ</label>
+                                        <input type="date" class="form-control" name="tanggal_awal_prj">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="basicpill-firstname-input" class="form-label">Tanggal Akhir PRJ</label>
+                                        <input type="date" class="form-control" name="tanggal_akhir_prf">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Due Date Pembayaran Uang Sewa Guna</label>
-                                        <input type="text" class="form-control" name="due_date_pembayaran_sewa_guna">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Due Date</label>
-                                        <input type="date" class="form-control" name="due_date">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Reminder</label>
-                                        <input type="date" class="form-control" name="reminder">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Jumlah Bayar</label>
+                                        <label for="basicpill-firstname-input" class="form-label">Biaya Sewa Guna</label>
                                         <input type="text" class="form-control" name="jumlah_bayar" oninput="this.value = this.value.replace(/[^0-9]/g, ''); this.value = formatRupiah(this.value);" placeholder="Rp 0">
                                         <script>
                                             function formatRupiah(angka) {
@@ -164,15 +133,20 @@ Admin Dashboard
                                             }
                                         </script>
                                     </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">PIC</label>
-                                        <input type="text" class="form-control" name="pic">
-                                    </div>
+
                                     <div class="mb-3">
                                         <label for="basicpill-firstname-input" class="form-label">Pending Issue</label>
                                         <input type="text" class="form-control" name="pending_issue">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="basicpill-firstname-input" class="form-label">Due Date</label>
+                                        <input type="date" class="form-control" name="due_date">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="basicpill-firstname-input" class="form-label">Reminder</label>
+                                        <input type="date" class="form-control" name="reminder">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -184,13 +158,15 @@ Admin Dashboard
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="mb-3">
-                                        <label for="basicpill-firstname-input" class="form-label">Penilaian</label>
-                                        <select class="form-control" name="penilaian">
-                                            <option value="">-- Select Status --</option>
-                                            <option value="1">Ya</option>
-                                            <option value="0">Tidak </option>
-                                        </select>
+                                        <label for="basicpill-firstname-input" class="form-label">Due Date Invoice</label>
+                                        <input type="date" class="form-control" name="due_date_invoice">
                                     </div>
+                                    <div class="mb-3">
+                                        <label for="basicpill-firstname-input" class="form-label">Tahapan Pembayaran Uang Sewa Guna</label>
+                                        <input type="text" class="form-control" name="due_date_pembayaran_sewa_guna">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
 
                                 </div>
 
