@@ -1,0 +1,90 @@
+@extends('layouts.dashboard')
+
+@section('title_dashboard')
+Timpp2 Dashboard
+@endsection
+
+@section('profile_url')
+{{ route('timpp2.profile') }}
+@endsection
+
+@section('logout_url')
+{{ route('timpp2.logout') }}
+@endsection
+
+@section('home_url')
+{{ route('timpp2.dashboard') }}
+@endsection
+
+@section('content')
+<div class="page-content">
+    <div class="container-fluid">
+
+        <!-- start page title -->
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                    <h4 class="mb-sm-0 font-size-18">Add Aset</h4>
+
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="{{ route('timpp2.asets.index') }}">Aset</a></li>
+                            <li class="breadcrumb-item active">Form Aset</li>
+                        </ol>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- end page title -->
+        <form action="{{ route('timpp2.asets.store') }}" method="POST">
+            <div class="row">
+                @csrf
+                <div class="col-12">
+                    <div>
+                        <div class="mb-3">
+                            <label for="example-text-input" class="form-label">Kode Aset</label>
+                            <input class="form-control" type="text" name="kode_aset">
+                        </div>
+                        <div class="mb-3">
+                            <label for="example-text-input" class="form-label">Nama Aset</label>
+                            <input class="form-control" type="text" name="nama_aset">
+                        </div>
+                        <div class="mb-3">
+                            <label for="example-text-input" class="form-label">Lokasi Aset</label>
+                             <select class="form-control" name="lokasi_aset">
+                                <option value="">Select Lokasi</option>
+                                <option value="Kilang LNG Badak">Kilang LNG Badak</option>
+                                <option value="Kilang LNG Arun">Kilang LNG Arun</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="example-text-input" class="form-label">Status </label>
+                            <select class="form-control" name="status_aset">
+                                <option value="">Select Status</option>
+                                <option value="Idle">Idle</option>
+                                <option value="Optimized">Optimized</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="example-text-input" class="form-label">Detail Aset </label>
+                            <input class="form-control" type="text" name="detail_aset">
+                        </div>
+                        <div class="mb-3">
+                            <label for="example-text-input" class="form-label">Deskripsi</label>
+                            <input class="form-control" type="text" name="deskripsi">
+                        </div>
+                    </div>
+                    <!-- end card -->
+                </div>
+                <div class="d-flex justify-content-end">
+                    <a href="{{ route('timpp2.asets.index')}}" class="btn btn-light me-1">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+                <!-- end col -->
+            </div>
+        </form>
+        <!-- end row -->
+    </div> <!-- container-fluid -->
+</div>
+@endsection

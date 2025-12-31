@@ -5,15 +5,15 @@ Aset Dashboard
 @endsection
 
 @section('profile_url')
-{{ route('admin.profile') }}
+{{ route('timpp2.profile') }}
 @endsection
 
 @section('logout_url')
-{{ route('admin.logout') }}
+{{ route('timpp2.logout') }}
 @endsection
 
 @section('home_url')
-{{ route('admin.dashboard') }}
+{{ route('timpp2.dashboard') }}
 @endsection
 
 @section('content')
@@ -27,7 +27,7 @@ Aset Dashboard
                     <h4 class="mb-sm-0 font-size-18">All Aset</h4>
 
                     <div class="page-title-right">
-                        <a href="{{ route('admin.asets.add') }}" class="btn btn-primary waves-effect waves-light">Add Aset</a>
+                        <a href="{{ route('timpp2.asets.add') }}" class="btn btn-primary waves-effect waves-light">Add Aset</a>
                     </div>
                 </div>
             </div>
@@ -62,7 +62,7 @@ Aset Dashboard
                                         <td>{{ $item->status_aset }}</td>
                                         <td>{{ $item->deskripsi }}</td>
                                         <td>
-                                            <a href="{{ route('admin.asets.edit',$item['uuid']) }}" class="btn btn-info waves-effect waves-light">
+                                            <a href="{{ route('timpp2.asets.edit',$item['uuid']) }}" class="btn btn-info waves-effect waves-light">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                         </td>

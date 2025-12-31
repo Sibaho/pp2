@@ -13,12 +13,16 @@ class AsetController extends Controller
 {
     public function index()
     {
-        $asets = Aset::all();
+        $asets = Aset::orderBy('created_at', 'desc')->get();
         $guard = Auth::guard('admin')->check() ? 'admin' : 'timpp2';
         $id = Auth::guard($guard)->user()->id;
         $profileData = $guard === 'admin'
             ? Admin::find($id)
             : Timpp2::find($id);
+
+        if ($guard === 'timpp2') {
+            return view('aset.timpp2-aset-index', compact('asets', 'profileData'));
+        }
 
         return view('aset.admin-aset-index', compact('asets', 'profileData'));
     }
@@ -30,6 +34,9 @@ class AsetController extends Controller
         $profileData = $guard === 'admin'
             ? Admin::find($id)
             : Timpp2::find($id);
+        if ($guard === 'timpp2') {
+            return view('aset.timpp2-aset-add', compact('profileData'));
+        }
         return view('aset.aset-add', compact('profileData'));
     }
 
@@ -64,8 +71,13 @@ class AsetController extends Controller
             'deskripsi' => $request->deskripsi,
         ]);
 
+        if (Auth::guard('admin')->check()) {
+            $route = 'admin.asets.index';
+        } else {
+            $route = 'timpp2.asets.index';
+        }
         // 4. Notifikasi sukses
-        return redirect()->route('admin.asets.index')->with([
+        return redirect()->route($route)->with([
             'message' => 'Aset added successfully',
             'alert-type' => 'success'
         ]);
@@ -80,6 +92,9 @@ class AsetController extends Controller
             ? Admin::find($id)
             : Timpp2::find($id);
         $aset = Aset::where('uuid', $uuid)->firstOrFail();
+        if ($guard === 'timpp2') {
+            return view('aset.timpp2-aset-edit', compact('aset', 'profileData'));
+        }
         return view('aset.aset-edit', compact('aset', 'profileData'));
     }
 
@@ -97,7 +112,12 @@ class AsetController extends Controller
 
         $aset->update($request->all());
 
-        return redirect()->route('admin.asets.index')->with('success', 'Aset updated successfully.');
+        if (Auth::guard('admin')->check()) {
+            $route = 'admin.asets.index';
+        } else {
+            $route = 'timpp2.asets.index';
+        }
+        return redirect()->route($route)->with('success', 'Aset updated successfully.');
     }
 
     public function delete($uuid)

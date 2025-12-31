@@ -16,14 +16,14 @@ class MonitoringController extends Controller
 {
     public function index()
     {
-        $monitoringData = Monitoring::with('aset')->get();
+        $monitoringData = Monitoring::with('aset')->orderBy('created_at', 'desc')->get();
         if (Auth::guard('admin')->check()) {
             $id = Auth::guard('admin')->user()->id;
             $profileData = Admin::find($id);
             return view('monitoring.admin-monitoring-index', compact('profileData', 'monitoringData'));
         }
         if (Auth::guard('timpp2')->check()) {
-            $id = Auth::guard('admin')->user()->id;
+            $id = Auth::guard('timpp2')->user()->id;
             $profileData = Timpp2::find($id);
             return view('monitoring.timpp2-monitoring-index', compact('profileData', 'monitoringData'));
         }
@@ -96,6 +96,12 @@ class MonitoringController extends Controller
             'alert-type' => 'success'
         ];
 
+        if (Auth::guard('admin')->check()) {
+            return redirect()->route('admin.monitoring.index')->with($notification);
+        }
+        if (Auth::guard('timpp2')->check()) {
+            return redirect()->route('timpp2.monitoring.index')->with($notification);
+        }
         return redirect()->back()->with($notification);
     }
 
@@ -111,7 +117,8 @@ class MonitoringController extends Controller
             return view('monitoring.admin-monitoring-edit', compact('monitoringData', 'profileData', 'asets'));
         }
         if (Auth::guard('timpp2')->check()) {
-
+            $userId = Auth::guard('timpp2')->user()->id;
+            $profileData = Timpp2::find($userId);
             return view('monitoring.timpp2-monitoring-edit', compact('monitoringData', 'profileData', 'asets'));
         }
     }
@@ -175,10 +182,18 @@ class MonitoringController extends Controller
             'penilaian' => $request->penilaian,
         ]);
 
-        return redirect()->back()->with([
+        $notification = [
             'message' => 'Monitoring updated successfully',
             'alert-type' => 'success'
-        ]);
+        ];
+        if (Auth::guard('admin')->check()) {
+            return redirect()->route('admin.monitoring.index')->with($notification);
+        }
+        if (Auth::guard('timpp2')->check()) {
+            return redirect()->route('timpp2.monitoring.index')->with($notification);
+        }
+
+        return redirect()->back()->with($notification);
     }
 
     public function downloadDokumen($uuid)

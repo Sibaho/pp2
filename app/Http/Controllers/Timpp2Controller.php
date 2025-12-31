@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Timpp2;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Aset;
+use App\Models\Monitoring;
 
 class Timpp2Controller extends Controller
 {
-     public function login()
+    public function login()
     {
         if (Auth::guard('timpp2')->check()) {
             return redirect()->route('timpp2.dashboard');
@@ -41,8 +43,12 @@ class Timpp2Controller extends Controller
     {
         $id = Auth::guard('timpp2')->user()->id;
         $profileData = Timpp2::find($id);
-        
-        return view('timpp2/dashboard', compact('profileData'));
+        $aktifCount = Monitoring::where('aktif', 'aktif')->count();
+        $selesaiCount = Monitoring::where('aktif', 'selesai')->count();
+        $monitorings = Monitoring::dueWithinDays(7)->get();
+        $idleAsetCount = Aset::where('status_aset', 'Idle')->count();
+        $optimizedAsetCount = Aset::where('status_aset', 'Optimized')->count();
+        return view('timpp2/dashboard', compact('profileData', 'aktifCount', 'selesaiCount', 'monitorings', 'idleAsetCount', 'optimizedAsetCount'));
     }
 
     public function logout()
