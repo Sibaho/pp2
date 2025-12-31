@@ -53,14 +53,14 @@ class AdminController extends Controller
         $monitorings = Monitoring::dueWithinDays(7)->get();
         $idleAsetCount = Aset::where('status_aset', 'Idle')->count();
         $optimizedAsetCount = Aset::where('status_aset', 'Optimized')->count();
-        
+
         return view('admin/dashboard', compact('profileData', 'aktifCount', 'selesaiCount', 'monitorings', 'idleAsetCount', 'optimizedAsetCount'));
     }
 
     public function logout()
     {
         Auth::guard('admin')->logout();
-        return redirect()->route('admin.login')->with('success', 'You are successfully logged out');
+        return redirect()->route('login')->with('success', 'You are successfully logged out');
     }
 
     public function profile()
@@ -104,33 +104,41 @@ class AdminController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:admins',
+            'email' => 'required|email|max:255',
             'password' => 'required|string|min:8',
         ]);
 
-        if ($request->kind == 'timpp2') {
-            $user = new Timpp2();
-            $user->uuid = Str::uuid();
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->password = Hash::make($request->password);
-            $user->role = 'timpp2';
-            $user->save();
-        } else {
-            $user = new User();
-            $user->uuid = Str::uuid();
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->password = Hash::make($request->password);
-            $user->role = 'staff';
-            $user->save();
+        // Cek email sudah ada
+        $emailExists = $request->kind === 'timpp2'
+            ? Timpp2::where('email', $request->email)->exists()
+            : User::where('email', $request->email)->exists();
+
+        if ($emailExists) {
+            return redirect()->back()->with([
+                'message' => 'Email sudah terdaftar',
+                'alert-type' => 'error',
+            ]);
         }
 
-        $notification = array(
+        // Simpan user
+        if ($request->kind === 'timpp2') {
+            $user = new Timpp2();
+            $user->role = 'timpp2';
+        } else {
+            $user = new User();
+            $user->role = 'staff';
+        }
+
+        $user->uuid = Str::uuid();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return redirect()->route('admin.view.users')->with([
             'message' => 'User Added Successfully',
-            'alert-type' => 'success'
-        );
-        return redirect()->back()->with($notification);
+            'alert-type' => 'success',
+        ]);
     }
 
     public function viewUsers()
@@ -166,48 +174,89 @@ class AdminController extends Controller
         return redirect()->back()->with('error', 'User not found.');
     }
 
-    public function editUser($uuid)
+    public function editUser($uuid, $role)
     {
         $id = Auth::guard('admin')->user()->id;
-        $profileData = Admin::find($id);
-        $user = User::where('uuid', $uuid)->first();
-        if ($user) {
-            return view('admin.user-edit', compact('user', 'profileData'));
+        $profileData = Admin::findOrFail($id);
+
+        if ($role === 'staff') {
+            $user = User::where('uuid', $uuid)->first();
+        } elseif ($role === 'timpp2') {
+            $user = Timpp2::where('uuid', $uuid)->first();
+        } else {
+            return redirect()->back()->with([
+                'message' => 'Role tidak valid.',
+                'alert-type' => 'error'
+            ]);
         }
-        return redirect()->back()->with('error', 'User not found.');
+
+        if (!$user) {
+            return redirect()->back()->with([
+                'message' => 'User not found.',
+                'alert-type' => 'error'
+            ]);
+        }
+
+        return view('admin.user-edit', compact('user', 'profileData', 'role'));
     }
 
-    public function updateUser(Request $request, $uuid)
+    public function updateUser(Request $request, $uuid, $role)
     {
-        if ($request->role == 'staff') {
+        // Validasi dasar
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'password' => 'nullable|min:6',
+        ]);
+
+        // Tentukan model berdasarkan role
+        if ($role === 'staff') {
             $user = User::where('uuid', $uuid)->first();
-            if ($user){
-                $user->name = $request->name;
-                $user->email = $request->email;
-
-                if ($request->filled('password')) {
-                    $user->password = bcrypt($request->password);
-                }
-
-                $user->save();
-
-                return redirect()->back()->with('success', 'User updated successfully.');
-            }
-        } elseif ($request->role == 'timpp2') {
+        } elseif ($role === 'timpp2') {
             $user = Timpp2::where('uuid', $uuid)->first();
-            if ($user){
-                $user->name = $request->name;
-                $user->email = $request->email;
-
-                if ($request->filled('password')) {
-                    $user->password = bcrypt($request->password);
-                }
-
-                $user->save();
-
-                return redirect()->back()->with('success', 'User updated successfully.');
-            }
+        } else {
+            return redirect()->back()->with([
+                'message' => 'Role tidak valid.',
+                'alert-type' => 'error'
+            ]);
         }
-        return redirect()->back()->with('error', 'User not found.');
+
+        if (!$user) {
+            return redirect()->back()->with([
+                'message' => 'User not found.',
+                'alert-type' => 'error'
+            ]);
+        }
+
+        // Cek email unik (kecuali milik user ini sendiri)
+        $emailExists = ($role === 'staff')
+            ? User::where('email', $request->email)
+            ->where('uuid', '!=', $uuid)
+            ->exists()
+            : Timpp2::where('email', $request->email)
+            ->where('uuid', '!=', $uuid)
+            ->exists();
+
+        if ($emailExists) {
+            return redirect()->back()->with([
+                'message' => 'Email sudah digunakan.',
+                'alert-type' => 'error'
+            ]);
+        }
+
+        // Update data
+        $user->name = $request->name;
+        $user->email = $request->email;
+
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
+        return redirect()->route('admin.view.users')->with([
+            'message' => 'User updated successfully.',
+            'alert-type' => 'success'
+        ]);
     }
 }

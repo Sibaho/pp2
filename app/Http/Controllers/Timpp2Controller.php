@@ -48,6 +48,6 @@ class Timpp2Controller extends Controller
     public function logout()
     {
         Auth::guard('timpp2')->logout();
-        return redirect()->route('timpp2.login')->with('success', 'You are successfully logged out');
+        return redirect()->route('login')->with('success', 'You are successfully logged out');
     }
 }

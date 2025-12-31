@@ -42,7 +42,7 @@ Admin Dashboard
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-body">
-                        <form action="{{ route('admin.user.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('admin.user.store') }}" method="POST">
                             @csrf
                             <div class="mb-3">
                                 <label for="basicpill-firstname-input" class="form-label">Name</label>

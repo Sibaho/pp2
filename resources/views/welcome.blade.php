@@ -56,8 +56,8 @@
             dan pengelolaan data aset secara terpusat dan terintegrasi.
         </p>
 
-        <a href="{{ route('admin.login') }}" class="btn">
-            Login Admin
+        <a href="{{ route('login') }}" class="btn">
+            Login
         </a>
 
         <footer>

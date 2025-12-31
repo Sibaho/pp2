@@ -47,8 +47,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/view-users', 'viewUsers')->name('view.users');
             Route::get('/add-user', 'addUser')->name('user.add');
             Route::post('/add-user', 'storeUser')->name('user.store');
-            Route::get('/edit-user/{uuid}', 'editUser')->name('user.edit');
-            Route::post('/update-user/{uuid}', 'updateUser')->name('user.update');
+            Route::get('/edit-user/{uuid}/{role}', 'editUser')->name('user.edit');
+            Route::post('/update-user/{uuid}/{role}', 'updateUser')->name('user.update');
             Route::delete('/delete-user', 'deleteUser')->name('user.delete');
         });
 

@@ -42,7 +42,7 @@ Admin Dashboard
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-body">
-                        <form action="{{ route('admin.user.update', ['uuid' => $user->uuid]) }}" method="POST">
+                        <form method="POST" action="{{ route('admin.user.update', [$user->uuid, $role]) }}">
                             @csrf
                             <input type="hidden" name="role" value="{{ $user->role }}">
                             <div class="mb-3">
