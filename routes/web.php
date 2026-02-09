@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AsetController;
 use App\Http\Controllers\MonitoringController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StafController;
 use App\Http\Controllers\Timpp2Controller;
 use Illuminate\Contracts\Queue\Monitor;
 use Illuminate\Support\Facades\Route;
@@ -109,10 +110,21 @@ Route::prefix('timpp2')->name('timpp2.')->group(function () {
     });
 });
 
-Route::get(
-    '/monitoring/dokumen/{uuid}',
-    [MonitoringController::class, 'downloadDokumen']
-)->name('monitoring.dokumen.download');
+Route::prefix('staff')->name('staff.')->group(function () {
+    Route::middleware('auth')->group(function () {
+        Route::controller(StafController::class)->group(function () {
+            Route::get('/dashboard', 'dashboard')->name('dashboard');
+            Route::get('/logout', 'logout')->name('logout');
+        });
+
+         Route::controller(MonitoringController::class)->group(function () {
+            Route::get('/monitoring', 'index')->name('monitoring.index');
+            Route::get('/monitoring/view/{uuid}', 'view')->name('monitoring.view');
+        });
+    });
+});
+
+Route::get('/monitoring/dokumen/{uuid}',[MonitoringController::class, 'downloadDokumen'])->name('monitoring.dokumen.download');
 
 Route::get(
     '/monitoring/dokumen/{uuid}/preview',

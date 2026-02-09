@@ -8,6 +8,7 @@ use App\Models\Admin;
 use App\Models\Aset;
 use App\Models\Monitoring;
 use App\Models\Timpp2;
+use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -26,6 +27,11 @@ class MonitoringController extends Controller
             $id = Auth::guard('timpp2')->user()->id;
             $profileData = Timpp2::find($id);
             return view('monitoring.timpp2-monitoring-index', compact('profileData', 'monitoringData'));
+        }
+        if (Auth::guard('web')->check()) {
+            $id = Auth::guard('web')->user()->id;
+            $profileData = User::find($id);
+            return view('monitoring.staff-monitoring-index', compact('profileData', 'monitoringData'));
         }
     }
 
